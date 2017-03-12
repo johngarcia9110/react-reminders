@@ -17,25 +17,49 @@ class App extends Component{
         this.props.addReminder(this.state.text);
     }
 
-    render(){
-        console.log('this.props', this.props);
+    renderReminders(){
+        const { reminders } = this.props;
         return(
-            <div className="app">
-                <div className="title">
-                    React Reminders
-                </div>
-                <div className="form-inline">
-                    <div className="form-group">
-                        <input className="form-control" 
-                        placeholder="I have to.." 
-                        type="text"
-                        onChange={event => this.setState({text : event.target.value})}
-                        />
+            <ul className="list-group">
+                <h3>Current Reminders:</h3>
+                {
+                    reminders.map(reminder => {
+                        return(
+                            <li key={reminder.id} className="list-group-item">
+                                <div>{reminder.text}</div>
+                            </li>
+                        )
+                    })
+                }
+            </ul>
+        )
+    }
+
+    render(){
+        return(
+            <div className="app row">
+                <div className="col-md-4 no-margin-left">
+                    <div className="side-bar">
+                        <div className="title">
+                            React Reminders
+                        </div>
+                        <div className="form">
+                            <div className="form-group">
+                                <input className="form-control" 
+                                placeholder="I have to.." 
+                                type="text"
+                                onChange={event => this.setState({text : event.target.value})}
+                                />
+                            </div>
+                            <button type="button" 
+                            className="btn btn-success"
+                            onClick={() => this.addReminder()}
+                            >Add Reminder</button>
+                        </div>
                     </div>
-                    <button type="button" 
-                    className="btn btn-success"
-                    onClick={() => this.addReminder()}
-                    >Add Reminder</button>
+                </div>
+                <div className="col-md-8 side-bar-right">
+                    { this.renderReminders() }
                 </div>
             </div>
         )

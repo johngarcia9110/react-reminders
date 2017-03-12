@@ -1,0 +1,38 @@
+html{
+    height: 100%
+}
+body{
+   background: #E8E9EB;
+   height: 100%
+}
+
+.no-margin-left{
+    padding-left: 0px;
+}
+
+.side-bar{
+    background: #FFF;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.side-bar-right{
+    background: #FFF;
+}
+
+.main-content{
+    background: #313638;
+    height: 100%
+}
+
+.app{
+    padding: 20px;
+}
+
+.title{
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.form-inline{
+}
