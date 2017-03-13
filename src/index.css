@@ -34,8 +34,39 @@ body{
     margin-bottom: 20px;
 }
 
+.todo-list h3{
+    display: inline-block;
+}
+
+.todo-list .btn-danger{
+    float: right;
+    margin: 12px 0px;
+}
+
+.priority-Low{
+    border-left: 8px solid #607d8b;
+}
+
+.priority-Medium{
+    border-left: 8px solid #ffeb3b;
+}
+
+.priority-High{
+    border-left: 8px solid #f44336;
+}
+
 .list-item{
     display: inline-block;
+}
+
+.list-group-item{
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.list-item-title{
+    font-weight: bold;
+    
 }
 
 .delete-button{

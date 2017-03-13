@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addReminder, deleteReminder } from '../actions';
-import moment from 'moment';
+import { addReminder, deleteReminder, clearReminders } from '../actions';
+import moment from 'moment-timezone';
 
 
 class App extends Component{
@@ -9,31 +9,43 @@ class App extends Component{
         super(props);
         this.state = {
             text : '',
-            dueDate : ''
+            dueDate : '',
+            priority : 'Low'
         }
     }
 
     addReminder(){
         console.log('this.state.dueDate', this.state.dueDate);
-        this.props.addReminder(this.state.text, this.state.dueDate);
+        this.props.addReminder(this.state.text, this.state.dueDate, this.state.priority);
     }
 
     deleteReminder(id){
         this.props.deleteReminder(id);
     }
 
+    clearReminders(){
+        this.props.clearReminders();
+    }
+
+    getPriority(priority){
+        return 'priority-' + priority;
+    }
+
     renderReminders(){
         const { reminders } = this.props;
         return(
-            <ul className="list-group">
+            <ul className="list-group todo-list">
                 <h3>Current Reminders:</h3>
+                <button className="btn btn-danger"
+                onClick={() => this.clearReminders()}
+                >Clear All</button>
                 {
                     reminders.map(reminder => {
                         return(
-                            <li key={reminder.id} className="list-group-item">
+                            <li key={reminder.id} className={this.getPriority(reminder.priority) + ' list-group-item'}>
                                 <div className="list-item">
-                                    <div>{reminder.text}</div>
-                                    <div><em>{ moment(new Date(reminder.dueDate)).fromNow()}</em></div>
+                                    <div className="list-item-title">{reminder.text}</div>
+                                    <div><strong>Due: </strong><em>{moment(reminder.dueDate).format("dddd, MMMM Do YYYY, h:mm:ss a")}</em></div>
                                 </div>
                                 <div className="list-item delete-button"
                                 onClick={() => this.deleteReminder(reminder.id)}>&#x2715;</div>
@@ -55,15 +67,30 @@ class App extends Component{
                         </div>
                         <div className="form">
                             <div className="form-group">
+                                <label htmlFor="">I have to:</label>
                                 <input className="form-control" 
-                                placeholder="I have to.." 
+                                placeholder="Do this.." 
                                 type="text"
                                 onChange={event => this.setState({text : event.target.value})}
                                 />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="">Due On:</label>
                                 <input className="form-control" 
                                 type="datetime-local"
                                 onChange={event => this.setState({dueDate : event.target.value})}
                                 />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="priority-select">Priority: </label>
+                                <select className="form-control" 
+                                id="priority-select"
+                                onChange={event => this.setState({priority : event.target.value})}
+                                >
+                                    <option>Low</option>
+                                    <option>Medium</option>
+                                    <option>High</option>
+                                </select>
                             </div>
                             <button type="button" 
                             className="btn btn-success"
@@ -86,4 +113,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { addReminder, deleteReminder })(App);
+export default connect(mapStateToProps, { addReminder, deleteReminder, clearReminders })(App);
