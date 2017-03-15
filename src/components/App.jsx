@@ -10,13 +10,14 @@ class App extends Component{
         this.state = {
             text : '',
             dueDate : '',
-            priority : 'Low'
+            priority : 'Low',
+            notes : ''
         }
     }
 
     addReminder(){
         console.log('this.state.dueDate', this.state.dueDate);
-        this.props.addReminder(this.state.text, this.state.dueDate, this.state.priority);
+        this.props.addReminder(this.state.text, this.state.dueDate, this.state.priority, this.state.notes);
     }
 
     deleteReminder(id){
@@ -31,6 +32,15 @@ class App extends Component{
         return 'priority-' + priority;
     }
 
+    resetState(){
+        this.setState({
+            text : '',
+            dueDate : '',
+            priority : 'Low',
+            notes : ''
+        });
+    }
+
     renderReminders(){
         const { reminders } = this.props;
         return(
@@ -43,12 +53,18 @@ class App extends Component{
                     reminders.map(reminder => {
                         return(
                             <li key={reminder.id} className={this.getPriority(reminder.priority) + ' list-group-item'}>
+                                <div className="list-item-wrapper">
                                 <div className="list-item">
                                     <div className="list-item-title">{reminder.text}</div>
                                     <div><strong>Due: </strong><em>{moment(reminder.dueDate).format("dddd, MMMM Do YYYY, h:mm:ss a")}</em></div>
                                 </div>
                                 <div className="list-item delete-button"
                                 onClick={() => this.deleteReminder(reminder.id)}>&#x2715;</div>
+                                </div>
+                                <div className="list-item-notes">
+                                    <div className="list-item-notes-title">Notes:</div>
+                                    <div>{reminder.notes ? reminder.notes : 'No notes for this item.'}</div>
+                                </div>
                             </li>
                         )
                     })
@@ -71,6 +87,7 @@ class App extends Component{
                                 <input className="form-control" 
                                 placeholder="Do this.." 
                                 type="text"
+                                value={this.state.text}
                                 onChange={event => this.setState({text : event.target.value})}
                                 />
                             </div>
@@ -78,6 +95,7 @@ class App extends Component{
                                 <label htmlFor="">Due On:</label>
                                 <input className="form-control" 
                                 type="datetime-local"
+                                value={this.state.dueDate}
                                 onChange={event => this.setState({dueDate : event.target.value})}
                                 />
                             </div>
@@ -92,9 +110,18 @@ class App extends Component{
                                     <option>High</option>
                                 </select>
                             </div>
+                            <div className="form-group">
+                                <label htmlFor="item-notes">Notes: </label>
+                                <textarea id="item-notes" 
+                                className="form-control" 
+                                rows="3"
+                                value={this.state.notes}
+                                onChange={event => this.setState({notes : event.target.value})}
+                                ></textarea>
+                            </div>
                             <button type="button" 
                             className="btn btn-success"
-                            onClick={() => this.addReminder()}
+                            onClick={() => {this.addReminder(); this.resetState();}}
                             >Add Reminder</button>
                         </div>
                     </div>
